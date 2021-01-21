@@ -18,8 +18,8 @@ Atlantis Lite is a free bootstrap 4 admin dashboard that is beautifully and eleg
 
 > Links
 
-- [Django Dashboard Atlantis](https://appseed.us/admin-dashboards/django-dashboard-atlantis) - Product page
-- [Django Dashboard Atlantis - Demo](https://django-dashboard-atlantis.appseed.us/) - LIVE Deployment
+- [Django Atlantis Lite](https://appseed.us/admin-dashboards/django-dashboard-atlantis) - Product page
+- [Django Atlantis Lite - Demo](https://django-atlantis-lite.appseed-srv1.com/) - LIVE Deployment
 
 <br />
 
