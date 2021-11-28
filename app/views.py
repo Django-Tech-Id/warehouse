@@ -11,12 +11,14 @@ from django import template
 
 @login_required(login_url="/login/")
 def index(request):
+    request.session['menu'] = 'dashboard'
+    return redirect('dashboard')
     
-    context = {}
-    context['segment'] = 'index'
+    # context = {}
+    # context['segment'] = 'index'
 
-    html_template = loader.get_template( 'index.html' )
-    return HttpResponse(html_template.render(context, request))
+    # html_template = loader.get_template( 'index.html' )
+    # return HttpResponse(html_template.render(context, request))
 
 @login_required(login_url="/login/")
 def pages(request):
