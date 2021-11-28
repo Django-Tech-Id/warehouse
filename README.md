@@ -4,7 +4,7 @@ Warehouse is an application for warehouse management. It's writtern on Python 3 
 
 <br />
 
-> Features
+# Features
 
 - Customer Management
 - Supplier Management
@@ -22,10 +22,107 @@ Warehouse is an application for warehouse management. It's writtern on Python 3 
 
 <br />
 
-<br />
-<br />
+# Screenshot
 
-![Django Dashboard Atlantis - Template project provided by AppSeed.](https://raw.githubusercontent.com/app-generator/django-dashboard-atlantis/master/media/django-dashboard-atlantis-screen.png)
+> Dashboard
+
+![Dashboard - Sistem Informasi Gudang](https://github.com/Django-Tech-Id/warehouse/blob/master/media/screenshot/dashboard.png?raw=true)
+
+> Customer List
+
+![Customer List - Sistem Informasi Gudang](https://github.com/Django-Tech-Id/warehouse/blob/master/media/screenshot/customer.png?raw=true)
+
+> Customer Form
+
+![Customer Form - Sistem Informasi Gudang](https://github.com/Django-Tech-Id/warehouse/blob/master/media/screenshot/customerform.png?raw=true)
+
+> Customer Print
+
+![Customer Print - Sistem Informasi Gudang](https://github.com/Django-Tech-Id/warehouse/blob/master/media/screenshot/customerprint.png?raw=true)
+
+> Supplier List
+
+![Supplier List - Sistem Informasi Gudang](https://github.com/Django-Tech-Id/warehouse/blob/master/media/screenshot/supplier.png?raw=true)
+
+> Warehouse List
+
+![Warehouse List - Sistem Informasi Gudang](https://github.com/Django-Tech-Id/warehouse/blob/master/media/screenshot/warehouse.png?raw=true)
+
+> Category List
+
+![Category List - Sistem Informasi Gudang](https://github.com/Django-Tech-Id/warehouse/blob/master/media/screenshot/category.png?raw=true)
+
+> Product List
+
+![Product List - Sistem Informasi Gudang](https://github.com/Django-Tech-Id/warehouse/blob/master/media/screenshot/product.png?raw=true)
+
+> Product Print
+
+![Product Print - Sistem Informasi Gudang](https://github.com/Django-Tech-Id/warehouse/blob/master/media/screenshot/productprint.png?raw=true)
+
+> Purchase List
+
+![Purchase List - Sistem Informasi Gudang](https://github.com/Django-Tech-Id/warehouse/blob/master/media/screenshot/buy.png?raw=true)
+
+> Purchase Print
+
+![Purchase Print - Sistem Informasi Gudang](https://github.com/Django-Tech-Id/warehouse/blob/master/media/screenshot/buyprint.png?raw=true)
+
+> Purchase Invoice
+
+![Purchase Invoice - Sistem Informasi Gudang](https://github.com/Django-Tech-Id/warehouse/blob/master/media/screenshot/buyinvoice.png?raw=true)
+
+> Sales List
+
+![Sales List - Sistem Informasi Gudang](https://github.com/Django-Tech-Id/warehouse/blob/master/media/screenshot/sell.png?raw=true)
+
+> Sales Print
+
+![Sales Print - Sistem Informasi Gudang](https://github.com/Django-Tech-Id/warehouse/blob/master/media/screenshot/sellprint.png?raw=true)
+
+> Sales Invoice
+
+![Sales Invoice - Sistem Informasi Gudang](https://github.com/Django-Tech-Id/warehouse/blob/master/media/screenshot/sellinvoice.png?raw=true)
+
+> Moveout List
+
+![Moveout List - Sistem Informasi Gudang](https://github.com/Django-Tech-Id/warehouse/blob/master/media/screenshot/moveout.png?raw=true)
+
+> Moveout Print
+
+![Moveout Print - Sistem Informasi Gudang](https://github.com/Django-Tech-Id/warehouse/blob/master/media/screenshot/moveoutprint.png?raw=true)
+
+> Moveout Evidence
+
+![Moveout Invoice - Sistem Informasi Gudang](https://github.com/Django-Tech-Id/warehouse/blob/master/media/screenshot/moveoutinvoice.png?raw=true)
+
+> Movein List
+
+![Movein List - Sistem Informasi Gudang](https://github.com/Django-Tech-Id/warehouse/blob/master/media/screenshot/movein.png?raw=true)
+
+> Moveout Print
+
+![Movein Print - Sistem Informasi Gudang](https://github.com/Django-Tech-Id/warehouse/blob/master/media/screenshot/moveinprint.png?raw=true)
+
+> Moveout Evidence
+
+![Movein Invoice - Sistem Informasi Gudang](https://github.com/Django-Tech-Id/warehouse/blob/master/media/screenshot/moveininvoice.png?raw=true)
+
+> Inventory List
+
+![Movein List - Sistem Informasi Gudang](https://github.com/Django-Tech-Id/warehouse/blob/master/media/screenshot/inventory.png?raw=true)
+
+> Inventory Print
+
+![Movein Print - Sistem Informasi Gudang](https://github.com/Django-Tech-Id/warehouse/blob/master/media/screenshot/inventoryprint.png?raw=true)
+
+> API History
+
+![API History - Sistem Informasi Gudang](https://github.com/Django-Tech-Id/warehouse/blob/master/media/screenshot/apihistory.png?raw=true)
+
+> API Warehouse
+
+![Movein Print - Sistem Informasi Gudang](https://github.com/Django-Tech-Id/warehouse/blob/master/media/screenshot/apiwarehouse.png?raw=true)
 
 <br />
 
