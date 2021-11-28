@@ -11,3 +11,4 @@ gunicorn
 whitenoise
 django-qr-code
 mysqlclient
+pdfkit
