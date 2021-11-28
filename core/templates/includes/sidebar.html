@@ -22,11 +22,11 @@
 
 							<div class="collapse in" id="collapseExample">
 								<ul class="nav">
-									<li>
+									<!-- <li>
 										<a href="#profile">
 											<span class="link-collapse">My Profile</span>
 										</a>
-									</li>
+									</li> -->
 									<li>
 										<a href="{% url 'logout' %}">
 											<span class="link-collapse">Logout</span>
@@ -37,7 +37,7 @@
 						</div>
 					</div>
 					<ul class="nav nav-primary">
-						<li class="nav-item {% if 'index' in segment %} active {% endif %}">
+						<li class="nav-item {% if request.session.menu == 'dashboard' %} active {% endif %}">
 							<a data-toggle="collapse" href="#dashboard" class="collapsed" aria-expanded="false">
 								<i class="fas fa-home"></i>
 								<p>Dashboard</p>
@@ -46,7 +46,7 @@
 							<div class="collapse" id="dashboard">
 								<ul class="nav nav-collapse">
 									<li>
-										<a href="/index.html">
+										<a href="{% url 'dashboard' %}">
 											<span class="sub-item">Dashboard</span>
 										</a>
 									</li>
@@ -54,6 +54,194 @@
 							</div>
 						</li>
 						<li class="nav-section">
+							<span class="sidebar-mini-icon">
+								<i class="fa fa-ellipsis-h"></i>
+							</span>
+							<h4 class="text-section">Master</h4>
+						</li>
+						<li class="nav-item {% if request.session.menu == 'dashboard-customer' or request.session.menu == 'dashboard-supplier' %} active {% endif %}">
+							<a data-toggle="collapse" href="#relation">
+								<i class="fas fa-handshake"></i>
+								<p>Relation</p>
+								<span class="caret"></span>
+							</a>
+							<div class="collapse" id="relation">
+								<ul class="nav nav-collapse">
+									<li class="{% if request.session.menu == 'dashboard-customer' %} active {% endif %}">
+										<a href="{% url 'dashboard-customer' %}">
+											<span class="sub-item">Customer</span>
+										</a>
+									</li>
+									<li class="{% if request.session.menu == 'dashboard-supplier' %} active {% endif %}">
+										<a href="{% url 'dashboard-supplier' %}">
+											<span class="sub-item">Supplier</span>
+										</a>
+									</li>
+								</ul>
+							</div>
+						</li>						
+						<li class="nav-item {% if request.session.menu == 'dashboard-warehouse' or request.session.menu == 'dashboard-category' or request.session.menu == 'dashboard-product' %} active {% endif %}">
+							<a data-toggle="collapse" href="#product">
+								<i class="fas fa-cubes"></i>
+								<p>Product</p>
+								<span class="caret"></span>
+							</a>
+							<div class="collapse" id="product">
+								<ul class="nav nav-collapse">
+									<li class="{% if request.session.menu == 'dashboard-warehouse' %} active {% endif %}">
+										<a href="{% url 'dashboard-warehouse' %}">
+											<span class="sub-item">Warehouse</span>
+										</a>
+									</li>
+									<li class="{% if request.session.menu == 'dashboard-category' %} active {% endif %}">
+										<a href="{% url 'dashboard-category' %}">
+											<span class="sub-item">Category</span>
+										</a>
+									</li>
+									<li class="{% if request.session.menu == 'dashboard-product' %} active {% endif %}">
+										<a href="{% url 'dashboard-product' %}">
+											<span class="sub-item">Product</span>
+										</a>
+									</li>
+								</ul>
+							</div>
+						</li>
+						<li class="nav-section">
+							<span class="sidebar-mini-icon">
+								<i class="fa fa-ellipsis-h"></i>
+							</span>
+							<h4 class="text-section">Transaction</h4>
+						</li>
+						<li class="nav-item {% if request.session.menu == 'dashboard-buy' %} active {% endif %}">
+							<a data-toggle="collapse" href="#purchase">
+								<i class="fas fa-shopping-cart"></i>
+								<p>Purchase</p>
+								<span class="caret"></span>
+							</a>
+							<div class="collapse" id="purchase">
+								<ul class="nav nav-collapse">
+									<li>
+										<a href="{% url 'dashboard-buy-create' %}">
+											<span class="sub-item">New Purchase</span>
+										</a>
+									</li>
+									<li class="active">
+										<a href="{% url 'dashboard-buy' %}">
+											<span class="sub-item">Purchase List</span>
+										</a>
+									</li>
+								</ul>
+							</div>
+						</li>												
+						<li class="nav-item {% if request.session.menu == 'dashboard-sell' %} active {% endif %}">
+							<a data-toggle="collapse" href="#sales">
+								<i class="fas fa-money-check"></i>
+								<p>Sales</p>
+								<span class="caret"></span>
+							</a>
+							<div class="collapse" id="sales">
+								<ul class="nav nav-collapse">
+									<li>
+										<a href="{% url 'dashboard-sell' %}">
+											<span class="sub-item">New Sales</span>
+										</a>
+									</li>
+									<li>
+										<a href="{% url 'dashboard-sell' %}">
+											<span class="sub-item">Sales List</span>
+										</a>
+									</li>
+								</ul>
+							</div>
+						</li>												
+						<li class="nav-item {% if request.session.menu == 'dashboard-moveout' %} active {% endif %}">
+							<a data-toggle="collapse" href="#moveout">
+								<i class="fas fa-minus"></i>
+								<p>Move Out</p>
+								<span class="caret"></span>
+							</a>
+							<div class="collapse" id="moveout">
+								<ul class="nav nav-collapse">
+									<li>
+										<a href="{% url 'dashboard-moveout-create' %}">
+											<span class="sub-item">New Move Out</span>
+										</a>
+									</li>
+									<li>
+										<a href="{% url 'dashboard-moveout' %}">
+											<span class="sub-item">Move Out List</span>
+										</a>
+									</li>
+								</ul>
+							</div>
+						</li>												
+						<li class="nav-item {% if request.session.menu == 'dashboard-movein' %} active {% endif %}">
+							<a data-toggle="collapse" href="#movein">
+								<i class="fas fa-plus"></i>
+								<p>Move In</p>
+								<span class="caret"></span>
+							</a>
+							<div class="collapse" id="movein">
+								<ul class="nav nav-collapse">
+									<li>
+										<a href="{% url 'dashboard-movein' %}">
+											<span class="sub-item">Move In List</span>
+										</a>
+									</li>
+								</ul>
+							</div>
+						</li>												
+						<li class="nav-section">
+							<span class="sidebar-mini-icon">
+								<i class="fa fa-ellipsis-h"></i>
+							</span>
+							<h4 class="text-section">Report</h4>
+						</li>
+						<li class="nav-item {% if request.session.menu == 'dashboard-inventory' %} active {% endif %}">
+							<a data-toggle="collapse" href="#report">
+								<i class="fas fa-users"></i>
+								<p>Report</p>
+								<span class="caret"></span>
+							</a>
+							<div class="collapse" id="report">
+								<ul class="nav nav-collapse">
+									<li>
+										<a href="{% url 'dashboard-inventory' %}">
+											<span class="sub-item">Inventory</span>
+										</a>
+									</li>
+								</ul>
+							</div>
+						</li>
+						<li class="nav-section">
+							<span class="sidebar-mini-icon">
+								<i class="fa fa-ellipsis-h"></i>
+							</span>
+							<h4 class="text-section">Setting</h4>
+						</li>
+						<li class="nav-item {% if request.session.menu == 'dashboard-company' %} active {% endif %}">
+							<a data-toggle="collapse" href="#company">
+								<i class="fas fa-users"></i>
+								<p>Company</p>
+								<span class="caret"></span>
+							</a>
+							<div class="collapse" id="company">
+								<ul class="nav nav-collapse">
+									<li>
+										<a href="{% url 'dashboard-company-create' %}">
+											<span class="sub-item">Profile</span>
+										</a>
+									</li>
+								</ul>
+							</div>
+						</li>
+
+
+
+
+
+
+						<!-- <li class="nav-section">
 							<span class="sidebar-mini-icon">
 								<i class="fa fa-ellipsis-h"></i>
 							</span>
@@ -293,7 +481,7 @@
                                href="https://appseed.us/admin-dashboards/django-dashboard-atlantis-dark-pro" 
                                class="btn btn-danger btn-block">
                                 <span class="btn-label mr-2"> <i class="fa fa-rocket"></i> </span>PRO Version</a> 
-						</li>
+						</li> -->
 					</ul>
 				{% else %}
 					<ul class="nav nav-primary">

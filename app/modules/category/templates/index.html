@@ -1,0 +1,203 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Tables {% endblock %} 
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+	<div class="content">
+		<div class="page-inner">
+			<div class="page-header">
+				<h4 class="page-title">Category</h4>
+				<ul class="breadcrumbs">
+					<li class="nav-home">
+						<a href="#">
+							<i class="flaticon-home"></i>
+						</a>
+					</li>
+					<li class="separator">
+						<i class="flaticon-right-arrow"></i>
+					</li>
+					<li class="nav-item">
+						<a href="{% url 'dashboard-category' %}">Category</a>
+					</li>
+					<li class="separator">
+						<i class="flaticon-right-arrow"></i>
+					</li>
+					<li class="nav-item">
+						<a href="{% url 'dashboard-category' %}">Category List</a>
+					</li>
+				</ul>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<div class="card">
+						<div class="card-header">
+							<div class="card-head-row">
+								<div class="card-title">Category List</div>
+								<div class="card-tools">
+									<ul class="nav nav-pills nav-secondary nav-pills-no-bd nav-sm" id="pills-tab" role="tablist">
+										<li class="nav-item">
+											<a href="{% url 'dashboard-category-create' %}" type="button" class="nav-link active" aria-selected="false">Add New</a>
+										</li>
+										<!-- <li class="nav-item">
+											<a href="{% url 'dashboard-category-create' %}" type="button" class="nav-link active" aria-selected="false">Export</a>
+										</li> -->
+										<li class="nav-item">
+											<a href="{{ print_url }}" target="_blank" type="button" class="nav-link active" aria-selected="false">Print</a>
+										</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+						<div class="card-body">
+							<div class="card-sub">
+								<div class="row">
+									<div class="col-md-6 col-lg-2">
+										Name:
+										<input type="text" name="name" class="form-control " placeholder="Name" id="name" value="{{ filters.name__icontains }}"/>
+									</div>
+									<div class="col-md-6 col-lg-2">
+										Status:
+										<select name="status" class="form-control " placeholder="Status" id="status">
+											<option value="" {% if filters.status__icontains == None %}selected{% endif %}>All</option>
+											<option value="1" {% if filters.status__icontains == '1' %}selected{% endif %}>Active</option>
+											<option value="0" {% if filters.status__icontains == '0' %}selected{% endif %}>Inactive</option>
+										</select>	
+									</div>
+									<div class="col-md-6 col-lg-6">
+										Description:
+										<input type="text" name="description" class="form-control " placeholder="Description" id="description" value="{{ filters.description__icontains }}"/>
+									</div>
+									<div class="col-md-6 col-lg-2">
+										<br/>
+										<a href="#" onclick="filter()" class="btn btn-md btn-success" width="100%">Filter</a>
+										<a href="{% url 'dashboard-category' %}" class="btn btn-md btn-primary" width="100%">Clear</a>
+									</div>
+								</div>
+							</div>
+							<table class="table mt-3 table-bordered table-hover table-striped">
+								<thead>
+									<tr>
+                                        <th class="col-md-1">No.</th>
+                                        <th class="col-md-4">Name</th>
+                                        <th class="col-md-2">Description</th>
+                                        <th class="col-md-2">Status</th>
+                                        <th class="col-md-2">Image</th>
+                                        <th class="col-md-1">Action</th>
+									</tr>
+								</thead>
+								<tbody>
+                                    {% for data in datas %}
+                                        <tr>
+                                            <td>{{ forloop.counter }}</td>
+                                            <td>{{ data.name }}</td>
+                                            <td>{{ data.description }}</td>
+                                            <td>
+												{% if data.status %}
+												Active
+												{% else %}
+												Inactive
+												{% endif %}
+											</td>
+                                            <td>
+												{% if data.image %}
+													<img src="{{ image_path }}{{ data.image.url }}" class="img-thumbnail" width="100px"/>
+												{% else %}
+													{% load static %}
+													<img src="{{ image_path }}{% get_media_prefix %}category/category.png" class="img-thumbnail" width="100px"/>
+												{% endif %}
+											</td>
+                                            <td>
+                                                <div class="btn-group" role="group" aria-label="Action">
+                                                    <a href="{% url 'dashboard-category-edit' data.id %}" type="button" class="btn btn-warning">Edit</a>
+                                                    <a href="#" onclick="hapus('{{ data.id }}')" type="submit" class="btn btn-danger">Delete</a>
+                                                </div>                                
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+	<!-- Atlantis DEMO methods, don't include it in your project! -->
+	<script>
+		//== Class Initialization
+		jQuery(document).ready(function() {
+			$('#delete_data').click(function(e) {
+					var postId = $(this).data('id');
+					swal({
+						title: 'Do you want to delete?',
+						text: "You won't be able to revert this!",
+						type: 'warning',
+						buttons:{
+							cancel: {
+								visible: true,
+								text : 'Cancel',
+								className: 'btn btn-success'
+							},        			
+							confirm: {
+								text : 'OK',
+								className : 'btn btn-danger'
+							}
+						}
+					}).then((willDelete) => {
+						if (willDelete) {
+							var url = "{% url 'dashboard-category-delete' 'hapus-ini' %}";
+							var newurl = url.replace('hapus-ini',postId);
+							window.location.href = newurl;
+						}
+					});
+			})
+		});
+	</script>
+	<script>
+		//== Class Initialization
+		function hapus(id){
+			swal({
+				title: 'Do you want to delete?',
+				text: "You won't be able to revert this!",
+				type: 'warning',
+				buttons:{
+					cancel: {
+						visible: true,
+						text : 'Cancel',
+						className: 'btn btn-success'
+					},        			
+					confirm: {
+						text : 'OK',
+						className : 'btn btn-danger'
+					}
+				}
+			}).then((willDelete) => {
+				if (willDelete) {
+					var url = "{% url 'dashboard-category-delete' 'hapus-ini' %}";
+					var newurl = url.replace('hapus-ini',id);
+					window.location.href = newurl;
+				}
+			});
+		}
+	</script>
+	<script>
+		function filter(){
+			var name = $('#name').val();
+			var status = $('#status option:selected').val();
+			var description = $('#description').val();
+			var action = "{% url 'dashboard-category' %}";
+			action = action+'?name='+name+'&status='+status+'&description='+description;
+			window.location.href = action;
+		}
+	</script>	
+{% endblock javascripts %}

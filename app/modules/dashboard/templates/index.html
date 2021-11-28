@@ -1,0 +1,968 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Dashboard {% endblock %} 
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+{% load humanize %}
+	<style>
+		a:hover { text-decoration: none !important; }
+	</style>
+	<div class="content">
+		<div class="panel-header bg-primary-gradient">
+			<div class="page-inner py-5">
+				<div class="d-flex align-items-left align-items-md-center flex-column flex-md-row">
+					<div>
+						<h2 class="text-white pb-2 fw-bold">SIFoDa</h2>
+						<h5 class="text-white op-7 mb-2">Sistem Informasi Pergudangan</h5>
+					</div>
+					<div class="ml-md-auto py-2 py-md-0">		
+						<input type="date" value="{{ from|date:'Y-m-d' }}" name="from" id="from" class="btn btn-white btn-border btn-round mr-2" required>				
+						<input type="date" value="{{ to|date:'Y-m-d' }}" name="to" id="to" class="btn btn-white btn-border btn-round mr-2" required>				
+						<a href="#" onclick="filter()" class="btn btn-secondary btn-round">Filter Data</a>
+						<a href="{% url 'dashboard' %}" class="btn btn-secondary btn-round">Reset Filter</a>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="page-inner mt--5">
+            <div class="row">
+
+                <div class="col-sm-6 col-md-3">
+                    <div class="card card-stats card-primary card-round">
+						<a href="{% url 'dashboard-buy' %}">
+							<div class="card-body">
+								<div class="row">
+									<div class="col-5">
+										<div class="icon-big text-center">
+											<i class="flaticon-users"></i>
+										</div>
+									</div>
+									<div class="col-7 col-stats">
+										<div class="numbers">
+											<p class="card-category">Buy</p>
+											<h4 class="card-title">{{ buy }}</h4>
+										</div>
+									</div>
+								</div>
+							</div>	
+						</a>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-3">
+                    <div class="card card-stats card-info card-round">
+						<a href="{% url 'dashboard-sell' %}">
+							<div class="card-body">
+								<div class="row">
+									<div class="col-5">
+										<div class="icon-big text-center">
+											<i class="flaticon-interface-6"></i>
+										</div>
+									</div>
+									<div class="col-7 col-stats">
+										<div class="numbers">
+											<p class="card-category">Sell</p>
+											<h4 class="card-title">{{ sell }}</h4>
+										</div>
+									</div>
+								</div>
+							</div>	
+						</a>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-3">
+                    <div class="card card-stats card-success card-round">
+						<a href="{% url 'dashboard-moveout' %}">
+							<div class="card-body ">
+								<div class="row">
+									<div class="col-5">
+										<div class="icon-big text-center">
+											<i class="flaticon-analytics"></i>
+										</div>
+									</div>
+									<div class="col-7 col-stats">
+										<div class="numbers">
+											<p class="card-category">Move Out</p>
+											<h4 class="card-title">{{ moveout }}</h4>
+										</div>
+									</div>
+								</div>
+							</div>	
+						</a>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-3">
+                    <div class="card card-stats card-secondary card-round">
+						<a href="{% url 'dashboard-movein' %}">
+							<div class="card-body ">
+								<div class="row">
+									<div class="col-5">
+										<div class="icon-big text-center">
+											<i class="flaticon-success"></i>
+										</div>
+									</div>
+									<div class="col-7 col-stats">
+										<div class="numbers">
+											<p class="card-category">Move In</p>
+											<h4 class="card-title">{{ movein }}</h4>
+										</div>
+									</div>
+								</div>
+							</div>	
+						</a>
+                    </div>
+                </div>
+            </div>
+			<!-- Card With Icon States Background -->
+			<div class="row">
+				<div class="col-sm-6 col-md-2">
+					<div class="card card-stats card-round">
+						<a href="{% url 'dashboard-movein' %}">
+							<div class="card-body ">
+								<div class="row align-items-center">
+									<div class="col-icon">
+										<div class="icon-big text-center icon-primary bubble-shadow-small">
+											<i class="flaticon-users"></i>
+										</div>
+									</div>
+									<div class="col col-stats ml-3 ml-sm-0">
+										<div class="numbers">
+											<p class="card-category">Created</p>
+											<h4 class="card-title">{{ created }}</h4>
+										</div>
+									</div>
+								</div>
+							</div>	
+						</a>
+					</div>
+				</div>
+				<div class="col-sm-6 col-md-2">
+					<div class="card card-stats card-round">
+						<a href="{% url 'dashboard-movein' %}">
+							<div class="card-body">
+								<div class="row align-items-center">
+									<div class="col-icon">
+										<div class="icon-big text-center icon-info bubble-shadow-small">
+											<i class="flaticon-interface-6"></i>
+										</div>
+									</div>
+									<div class="col col-stats ml-3 ml-sm-0">
+										<div class="numbers">
+											<p class="card-category">Registered</p>
+											<h4 class="card-title">{{ registered }}</h4>
+										</div>
+									</div>
+								</div>
+							</div>								
+						</a>
+					</div>
+				</div>
+				<div class="col-sm-6 col-md-2">
+					<div class="card card-stats card-round">
+						<a href="{% url 'dashboard-movein' %}">
+							<div class="card-body">
+								<div class="row align-items-center">
+									<div class="col-icon">
+										<div class="icon-big text-center icon-success bubble-shadow-small">
+											<i class="flaticon-graph"></i>
+										</div>
+									</div>
+									<div class="col col-stats ml-3 ml-sm-0">
+										<div class="numbers">
+											<p class="card-category">Delivered</p>
+											<h4 class="card-title">{{ delivered }}</h4>
+										</div>
+									</div>
+								</div>
+							</div>								
+						</a>
+					</div>
+				</div>
+				<div class="col-sm-6 col-md-2">
+					<div class="card card-stats card-round">
+						<a href="{% url 'dashboard-movein' %}">
+							<div class="card-body">
+								<div class="row align-items-center">
+									<div class="col-icon">
+										<div class="icon-big text-center icon-secondary bubble-shadow-small">
+											<i class="flaticon-success"></i>
+										</div>
+									</div>
+									<div class="col col-stats ml-3 ml-sm-0">
+										<div class="numbers">
+											<p class="card-category">Received</p>
+											<h4 class="card-title">{{ received }}</h4>
+										</div>
+									</div>
+								</div>
+							</div>								
+						</a>
+					</div>
+				</div>
+				<div class="col-sm-6 col-md-2">
+					<div class="card card-stats card-round">
+						<a href="{% url 'dashboard-movein' %}">
+							<div class="card-body">
+								<div class="row align-items-center">
+									<div class="col-icon">
+										<div class="icon-big text-center icon-secondary bubble-shadow-small">
+											<i class="flaticon-success"></i>
+										</div>
+									</div>
+									<div class="col col-stats ml-3 ml-sm-0">
+										<div class="numbers">
+											<p class="card-category">Pending</p>
+											<h4 class="card-title">{{ pending }}</h4>
+										</div>
+									</div>
+								</div>
+							</div>								
+						</a>
+					</div>
+				</div>
+				<div class="col-sm-6 col-md-2">
+					<div class="card card-stats card-round">
+						<a href="{% url 'dashboard-movein' %}">
+							<div class="card-body">
+								<div class="row align-items-center">
+									<div class="col-icon">
+										<div class="icon-big text-center icon-secondary bubble-shadow-small">
+											<i class="flaticon-success"></i>
+										</div>
+									</div>
+									<div class="col col-stats ml-3 ml-sm-0">
+										<div class="numbers">
+											<p class="card-category">Accepted</p>
+											<h4 class="card-title">{{ accepted }}</h4>
+										</div>
+									</div>
+								</div>
+							</div>								
+						</a>
+					</div>
+				</div>
+			</div>
+			<!-- Card With Icon States Color -->
+			<div class="row">
+				<div class="col-sm-6 col-md-2">
+					<div class="card card-stats card-round">
+						<div class="card-body ">
+							<div class="row">
+								<div class="col-5">
+									<div class="icon-big text-center">
+										<i class="flaticon-chart-pie text-warning"></i>
+									</div>
+								</div>
+								<div class="col-7 col-stats">
+									<div class="numbers">
+										<p class="card-category">Customer</p>
+										<h4 class="card-title">{{ customer }}</h4>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-6 col-md-2">
+					<div class="card card-stats card-round">
+						<div class="card-body ">
+							<div class="row">
+								<div class="col-5">
+									<div class="icon-big text-center">
+										<i class="flaticon-coins text-success"></i>
+									</div>
+								</div>
+								<div class="col-7 col-stats">
+									<div class="numbers">
+										<p class="card-category">Supplier</p>
+										<h4 class="card-title">{{ supplier }}</h4>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-6 col-md-2">
+					<div class="card card-stats card-round">
+						<div class="card-body">
+							<div class="row">
+								<div class="col-5">
+									<div class="icon-big text-center">
+										<i class="flaticon-error text-danger"></i>
+									</div>
+								</div>
+								<div class="col-7 col-stats">
+									<div class="numbers">
+										<p class="card-category">Warehouse</p>
+										<h4 class="card-title">{{ warehouse }}</h4>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-6 col-md-2">
+					<div class="card card-stats card-round">
+						<div class="card-body">
+							<div class="row">
+								<div class="col-5">
+									<div class="icon-big text-center">
+										<i class="flaticon-twitter text-primary"></i>
+									</div>
+								</div>
+								<div class="col-7 col-stats">
+									<div class="numbers">
+										<p class="card-category">Category</p>
+										<h4 class="card-title">{{ category }}</h4>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-6 col-md-2">
+					<div class="card card-stats card-round">
+						<div class="card-body">
+							<div class="row">
+								<div class="col-5">
+									<div class="icon-big text-center">
+										<i class="flaticon-twitter text-primary"></i>
+									</div>
+								</div>
+								<div class="col-7 col-stats">
+									<div class="numbers">
+										<p class="card-category">Product</p>
+										<h4 class="card-title">{{ product }}</h4>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-6 col-md-2">
+					<div class="card card-stats card-round">
+						<div class="card-body">
+							<div class="row">
+								<div class="col-5">
+									<div class="icon-big text-center">
+										<i class="flaticon-twitter text-primary"></i>
+									</div>
+								</div>
+								<div class="col-7 col-stats">
+									<div class="numbers">
+										<p class="card-category">User</p>
+										<h4 class="card-title">{{ user }}</h4>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="row mt--2">
+				<div class="col-md-6">
+					<div class="card full-height">
+						<div class="card-body">
+							<div class="card-title">Overall statistics</div>
+							<div class="card-category">Daily information about statistics in system</div>
+							<div class="d-flex flex-wrap justify-content-around pb-2 pt-4">
+								<div class="px-2 pb-2 pb-md-0 text-center">
+									<div id="circles-1"></div>
+									<h6 class="fw-bold mt-3 mb-0">Buy</h6>
+								</div>
+								<div class="px-2 pb-2 pb-md-0 text-center">
+									<div id="circles-2"></div>
+									<h6 class="fw-bold mt-3 mb-0">Sell</h6>
+								</div>
+								<div class="px-2 pb-2 pb-md-0 text-center">
+									<div id="circles-3"></div>
+									<h6 class="fw-bold mt-3 mb-0">Move Out</h6>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="card full-height">
+						<div class="card-body">
+							<div class="card-title">Total income & spend statistics</div>
+							<div class="row py-3">
+								<div class="col-md-4 d-flex flex-column justify-content-around">
+									<div>
+										<h6 class="fw-bold text-uppercase text-success op-8">Total Income</h6>
+										<h3 class="fw-bold">Rp. {{ income|floatformat:2|intcomma }}</h3>
+									</div>
+									<div>
+										<h6 class="fw-bold text-uppercase text-danger op-8">Total Spend</h6>
+										<h3 class="fw-bold">Rp. {{ expense|floatformat:2|intcomma }}</h3>
+									</div>
+								</div>
+								<div class="col-md-8">
+									<div id="chart-container">
+										<canvas id="totalIncomeChart"></canvas>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<div class="card">
+						<div class="card-header">
+							<div class="card-head-row">
+								<div class="card-title">Income Statistics</div>
+								<!-- <div class="card-tools">
+									<a href="#" class="btn btn-info btn-border btn-round btn-sm mr-2">
+										<span class="btn-label">
+											<i class="fa fa-pencil"></i>
+										</span>
+										Export
+									</a>
+									<a href="#" class="btn btn-info btn-border btn-round btn-sm">
+										<span class="btn-label">
+											<i class="fa fa-print"></i>
+										</span>
+										Print
+									</a>
+								</div> -->
+							</div>
+						</div>
+						<div class="card-body">
+							<div class="chart-container" style="min-height: 375px">
+								<canvas id="statisticsChart"></canvas>
+							</div>
+							<div id="myChartLegend"></div>
+						</div>
+					</div>
+				</div>
+				<!-- <div class="col-md-4">
+					<div class="card">
+						<div class="card-body pb-0">
+							<div class="h1 fw-bold float-right text-warning">+7%</div>
+							<h2 class="mb-2">{{ transaction }}</h2>
+							<p class="text-muted">Transactions</p>
+							<div class="pull-in sparkline-fix">
+								<div id="lineChart"></div>
+							</div>
+						</div>
+					</div>
+				</div>								
+				<div class="col-md-4">
+					<div class="card card-primary">
+						<div class="card-header">
+							<div class="card-title">Daily Sales</div>
+							<div class="card-category">March 25 - April 02</div>
+						</div>
+						<div class="card-body pb-0">
+							<div class="mb-4 mt-2">
+								<h1>Rp. {{ sales|floatformat:2|intcomma }}</h1>
+							</div>
+							<div class="pull-in">
+								<canvas id="dailySalesChart"></canvas>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="card">
+						<div class="card-header">
+							<div class="card-title">Top Products</div>
+						</div>
+						<div class="card-body pb-0">
+							<div class="d-flex">
+								<div class="avatar">
+									<img src="/static/assets/img/logoproduct.svg" alt="..." class="avatar-img rounded-circle">
+								</div>
+								<div class="flex-1 pt-1 ml-2">
+									<h6 class="fw-bold mb-1">CSS</h6>
+									<small class="text-muted">Cascading Style Sheets</small>
+								</div>
+								<div class="d-flex ml-auto align-items-center">
+									<h3 class="text-info fw-bold">+$17</h3>
+								</div>
+							</div>
+							<div class="separator-dashed"></div>
+							<div class="d-flex">
+								<div class="avatar">
+									<img src="/static/assets/img/logoproduct.svg" alt="..." class="avatar-img rounded-circle">
+								</div>
+								<div class="flex-1 pt-1 ml-2">
+									<h6 class="fw-bold mb-1">J.CO Donuts</h6>
+									<small class="text-muted">The Best Donuts</small>
+								</div>
+								<div class="d-flex ml-auto align-items-center">
+									<h3 class="text-info fw-bold">+$300</h3>
+								</div>
+							</div>
+							<div class="separator-dashed"></div>
+							<div class="d-flex">
+								<div class="avatar">
+									<img src="/static/assets/img/logoproduct3.svg" alt="..." class="avatar-img rounded-circle">
+								</div>
+								<div class="flex-1 pt-1 ml-2">
+									<h6 class="fw-bold mb-1">Ready Pro</h6>
+									<small class="text-muted">Bootstrap 4 Admin Dashboard</small>
+								</div>
+								<div class="d-flex ml-auto align-items-center">
+									<h3 class="text-info fw-bold">+$350</h3>
+								</div>
+							</div>
+							<div class="separator-dashed"></div>
+							<div class="pull-in">
+								<canvas id="topProductsChart"></canvas>
+							</div>
+						</div>
+					</div>					
+				</div> -->
+			</div>
+		</div>
+	</div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+	<!-- Atlantis DEMO methods, don't include it in your project! -->
+	<script src="/static/assets/js/setting-demo.js"></script>
+	<!-- <script src="/static/assets/js/demo.js"></script> -->
+
+	<script>
+		Circles.create({
+			id:'circles-1',
+			radius:45,
+			value:'{{ buy }}',
+			maxValue:'{{ transaction }}',
+			width:7,
+			text: '{{ buy }}',
+			colors:['#f1f1f1', '#FF9E27'],
+			duration:400,
+			wrpClass:'circles-wrp',
+			textClass:'circles-text',
+			styleWrapper:true,
+			styleText:true
+		})
+
+		Circles.create({
+			id:'circles-2',
+			radius:45,
+			value:'{{ sell }}',
+			maxValue:'{{ transaction }}',
+			width:7,
+			text: '{{ sell }}',
+			colors:['#f1f1f1', '#2BB930'],
+			duration:400,
+			wrpClass:'circles-wrp',
+			textClass:'circles-text',
+			styleWrapper:true,
+			styleText:true
+		})
+
+		Circles.create({
+			id:'circles-3',
+			radius:45,
+			value:'{{ moveout}}',
+			maxValue:'{{ transaction }}',
+			width:7,
+			text: '{{ moveout}}',
+			colors:['#f1f1f1', '#F25961'],
+			duration:400,
+			wrpClass:'circles-wrp',
+			textClass:'circles-text',
+			styleWrapper:true,
+			styleText:true
+		})
+
+		var totalIncomeChart = document.getElementById('totalIncomeChart').getContext('2d');
+
+		var mytotalIncomeChart = new Chart(totalIncomeChart, {
+			type: 'bar',
+			data: {
+				labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+				datasets : [{
+					label: "Total Income",
+					backgroundColor: '#ff9e27',
+					borderColor: 'rgb(23, 125, 255)',
+					data: ['{{ incomes.1.income }}', '{{ incomes.2.income }}', '{{ incomes.3.income }}', '{{ incomes.4.income }}', '{{ incomes.5.income }}', '{{ incomes.6.income }}', '{{ incomes.7.income }}', '{{ incomes.8.income }}', '{{ incomes.9.income }}', '{{ incomes.10.income }}', '{{ incomes.11.income }}', '{{ incomes.12.income }}'],
+				}],
+			},
+			options: {
+				responsive: true,
+				maintainAspectRatio: false,
+				legend: {
+					display: false,
+				},
+				scales: {
+					yAxes: [{
+						ticks: {
+							display: false //this will remove only the label
+						},
+						gridLines : {
+							drawBorder: false,
+							display : false
+						}
+					}],
+					xAxes : [ {
+						gridLines : {
+							drawBorder: false,
+							display : false
+						}
+					}]
+				},
+			}
+		});
+
+		$('#lineChart').sparkline([105,103,123,100,95,105,115], {
+			type: 'line',
+			height: '70',
+			width: '100%',
+			lineWidth: '2',
+			lineColor: '#ffa534',
+			fillColor: 'rgba(255, 165, 52, .14)'
+		});
+	</script>
+	<script>
+		function filter(){
+			var from = $('#from').val();
+			var to = $('#to').val();
+			var action = "{% url 'dashboard' %}";
+			action = action+'?from='+from+'&to='+to;
+			window.location.href = action;
+		}
+	</script>
+
+	<script>
+		"use strict";
+		// Cicle Chart
+		Circles.create({
+			id:           'task-complete',
+			radius:       50,
+			value:        80,
+			maxValue:     100,
+			width:        5,
+			text:         function(value){return value + '%';},
+			colors:       ['#36a3f7', '#fff'],
+			duration:     400,
+			wrpClass:     'circles-wrp',
+			textClass:    'circles-text',
+			styleWrapper: true,
+			styleText:    true
+		})
+
+		// //Notify
+		// $.notify({
+		// 	icon: 'flaticon-alarm-1',
+		// 	title: 'Atlantis Lite',
+		// 	message: 'Free Bootstrap 4 Admin Dashboard',
+		// },{
+		// 	type: 'info',
+		// 	placement: {
+		// 		from: "bottom",
+		// 		align: "right"
+		// 	},
+		// 	time: 1000,
+		// });
+
+		// JQVmap
+		$('#map-example').vectorMap(
+		{
+			map: 'world_en',
+			backgroundColor: 'transparent',
+			borderColor: '#fff',
+			borderWidth: 2,
+			color: '#e4e4e4',
+			enableZoom: true,
+			hoverColor: '#35cd3a',
+			hoverOpacity: null,
+			normalizeFunction: 'linear',
+			scaleColors: ['#b6d6ff', '#005ace'],
+			selectedColor: '#35cd3a',
+			selectedRegions: ['ID', 'RU', 'US', 'AU', 'CN', 'BR'],
+			showTooltip: true,
+			onRegionClick: function(element, code, region)
+			{
+				return false;
+			}
+		});
+
+		//Chart
+
+		var ctx = document.getElementById('statisticsChart').getContext('2d');
+
+		var statisticsChart = new Chart(ctx, {
+			type: 'line',
+			data: {
+				labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+				datasets: [ {
+					label: "Cost",
+					borderColor: '#f3545d',
+					pointBackgroundColor: 'rgba(243, 84, 93, 0.6)',
+					pointRadius: 0,
+					backgroundColor: 'rgba(243, 84, 93, 0.4)',
+					legendColor: '#f3545d',
+					fill: true,
+					borderWidth: 2,
+					data: [
+							'{% if incomes.1.cost == None %}0{% else %}{{ incomes.1.cost }}{% endif %}', 
+							'{% if incomes.2.cost == None %}0{% else %}{{ incomes.2.cost }}{% endif %}', 
+							'{% if incomes.3.cost == None %}0{% else %}{{ incomes.3.cost }}{% endif %}', 
+							'{% if incomes.4.cost == None %}0{% else %}{{ incomes.4.cost }}{% endif %}', 
+							'{% if incomes.5.cost == None %}0{% else %}{{ incomes.5.cost }}{% endif %}', 
+							'{% if incomes.6.cost == None %}0{% else %}{{ incomes.6.cost }}{% endif %}', 
+							'{% if incomes.7.cost == None %}0{% else %}{{ incomes.7.cost }}{% endif %}', 
+							'{% if incomes.8.cost == None %}0{% else %}{{ incomes.8.cost }}{% endif %}', 
+							'{% if incomes.9.cost == None %}0{% else %}{{ incomes.9.cost }}{% endif %}', 
+							'{% if incomes.10.cost == None %}0{% else %}{{ incomes.10.cost }}{% endif %}', 
+							'{% if incomes.11.cost == None %}0{% else %}{{ incomes.11.cost }}{% endif %}', 
+							'{% if incomes.12.cost == None %}0{% else %}{{ incomes.12.cost }}{% endif %}'
+						],
+				}, {
+					label: "Income",
+					borderColor: '#fdaf4b',
+					pointBackgroundColor: 'rgba(253, 175, 75, 0.6)',
+					pointRadius: 0,
+					backgroundColor: 'rgba(253, 175, 75, 0.4)',
+					legendColor: '#fdaf4b',
+					fill: true,
+					borderWidth: 2,
+					data: [
+						'{% if incomes.1.income == None %}0{% else %}{{ incomes.1.income }}{% endif %}', 
+						'{% if incomes.2.income == None %}0{% else %}{{ incomes.2.income }}{% endif %}', 
+						'{% if incomes.3.income == None %}0{% else %}{{ incomes.3.income }}{% endif %}', 
+						'{% if incomes.4.income == None %}0{% else %}{{ incomes.4.income }}{% endif %}', 
+						'{% if incomes.5.income == None %}0{% else %}{{ incomes.5.income }}{% endif %}', 
+						'{% if incomes.6.income == None %}0{% else %}{{ incomes.6.income }}{% endif %}', 
+						'{% if incomes.7.income == None %}0{% else %}{{ incomes.7.income }}{% endif %}', 
+						'{% if incomes.8.income == None %}0{% else %}{{ incomes.8.income }}{% endif %}', 
+						'{% if incomes.9.income == None %}0{% else %}{{ incomes.9.income }}{% endif %}', 
+						'{% if incomes.10.income == None %}0{% else %}{{ incomes.10.income }}{% endif %}', 
+						'{% if incomes.11.income == None %}0{% else %}{{ incomes.11.income }}{% endif %}', 
+						'{% if incomes.12.income == None %}0{% else %}{{ incomes.12.income }}{% endif %}'
+						],
+				}, {
+					label: "Sales",
+					borderColor: '#177dff',
+					pointBackgroundColor: 'rgba(23, 125, 255, 0.6)',
+					pointRadius: 0,
+					backgroundColor: 'rgba(23, 125, 255, 0.4)',
+					legendColor: '#177dff',
+					fill: true,
+					borderWidth: 2,
+					data: [
+						'{% if incomes.1.sales == None %}0{% else %}{{ incomes.1.sales }}{% endif %}', 
+						'{% if incomes.2.sales == None %}0{% else %}{{ incomes.2.sales }}{% endif %}', 
+						'{% if incomes.3.sales == None %}0{% else %}{{ incomes.3.sales }}{% endif %}', 
+						'{% if incomes.4.sales == None %}0{% else %}{{ incomes.4.sales }}{% endif %}', 
+						'{% if incomes.5.sales == None %}0{% else %}{{ incomes.5.sales }}{% endif %}', 
+						'{% if incomes.6.sales == None %}0{% else %}{{ incomes.6.sales }}{% endif %}', 
+						'{% if incomes.7.sales == None %}0{% else %}{{ incomes.7.sales }}{% endif %}', 
+						'{% if incomes.8.sales == None %}0{% else %}{{ incomes.8.sales }}{% endif %}', 
+						'{% if incomes.9.sales == None %}0{% else %}{{ incomes.9.sales }}{% endif %}', 
+						'{% if incomes.10.sales == None %}0{% else %}{{ incomes.10.sales }}{% endif %}', 
+						'{% if incomes.11.sales == None %}0{% else %}{{ incomes.11.sales }}{% endif %}', 
+						'{% if incomes.12.sales == None %}0{% else %}{{ incomes.12.sales }}{% endif %}'
+						],
+				}]
+			},
+			options : {
+				responsive: true, 
+				maintainAspectRatio: false,
+				legend: {
+					display: false
+				},
+				tooltips: {
+					bodySpacing: 4,
+					mode:"nearest",
+					intersect: 0,
+					position:"nearest",
+					xPadding:10,
+					yPadding:10,
+					caretPadding:10
+				},
+				layout:{
+					padding:{left:5,right:5,top:15,bottom:15}
+				},
+				scales: {
+					yAxes: [{
+						ticks: {
+							fontStyle: "500",
+							beginAtZero: false,
+							maxTicksLimit: 5,
+							padding: 10
+						},
+						gridLines: {
+							drawTicks: false,
+							display: false
+						}
+					}],
+					xAxes: [{
+						gridLines: {
+							zeroLineColor: "transparent"
+						},
+						ticks: {
+							padding: 10,
+							fontStyle: "500"
+						}
+					}]
+				}, 
+				legendCallback: function(chart) { 
+					var text = []; 
+					text.push('<ul class="' + chart.id + '-legend html-legend">'); 
+					for (var i = 0; i < chart.data.datasets.length; i++) { 
+						text.push('<li><span style="background-color:' + chart.data.datasets[i].legendColor + '"></span>'); 
+						if (chart.data.datasets[i].label) { 
+							text.push(chart.data.datasets[i].label); 
+						} 
+						text.push('</li>'); 
+					} 
+					text.push('</ul>'); 
+					return text.join(''); 
+				}  
+			}
+		});
+
+		var myLegendContainer = document.getElementById("myChartLegend");
+
+		// generate HTML legend
+		myLegendContainer.innerHTML = statisticsChart.generateLegend();
+
+		// bind onClick event to all LI-tags of the legend
+		var legendItems = myLegendContainer.getElementsByTagName('li');
+		for (var i = 0; i < legendItems.length; i += 1) {
+			legendItems[i].addEventListener("click", legendClickCallback, false);
+		}
+
+		var dailySalesChart = document.getElementById('dailySalesChart').getContext('2d');
+
+		var myDailySalesChart = new Chart(dailySalesChart, {
+			type: 'line',
+			data: {
+				labels:["January",
+				"February",
+				"March",
+				"April",
+				"May",
+				"June",
+				"July",
+				"August",
+				"September"],
+				datasets:[ {
+					label: "Sales Analytics", fill: !0, backgroundColor: "rgba(255,255,255,0.2)", borderColor: "#fff", borderCapStyle: "butt", borderDash: [], borderDashOffset: 0, pointBorderColor: "#fff", pointBackgroundColor: "#fff", pointBorderWidth: 1, pointHoverRadius: 5, pointHoverBackgroundColor: "#fff", pointHoverBorderColor: "#fff", pointHoverBorderWidth: 1, pointRadius: 1, pointHitRadius: 5, data: [65, 59, 80, 81, 56, 55, 40, 35, 30]
+				}]
+			},
+			options : {
+				maintainAspectRatio:!1, legend: {
+					display: !1
+				}
+				, animation: {
+					easing: "easeInOutBack"
+				}
+				, scales: {
+					yAxes:[ {
+						display:!1, ticks: {
+							fontColor: "rgba(0,0,0,0.5)", fontStyle: "bold", beginAtZero: !0, maxTicksLimit: 10, padding: 0
+						}
+						, gridLines: {
+							drawTicks: !1, display: !1
+						}
+					}
+					], xAxes:[ {
+						display:!1, gridLines: {
+							zeroLineColor: "transparent"
+						}
+						, ticks: {
+							padding: -20, fontColor: "rgba(255,255,255,0.2)", fontStyle: "bold"
+						}
+					}
+					]
+				}
+			}
+		});
+
+		$("#activeUsersChart").sparkline([112,109,120,107,110,85,87,90,102,109,120,99,110,85,87,94], {
+			type: 'bar',
+			height: '100',
+			barWidth: 9,
+			barSpacing: 10,
+			barColor: 'rgba(255,255,255,.3)'
+		});
+
+		var topProductsChart = document.getElementById('topProductsChart').getContext('2d');
+
+		var myTopProductsChart = new Chart(topProductsChart, {
+			type:"line",
+			data: {
+				labels:["January",
+				"February",
+				"March",
+				"April",
+				"May",
+				"June",
+				"July",
+				"August",
+				"September",
+				"October",
+				"January",
+				"February",
+				"March",
+				"April",
+				"May",
+				"June",
+				"July",
+				"August",
+				"September",
+				"October",
+				"January",
+				"February",
+				"March",
+				"April",
+				"May",
+				"June",
+				"July",
+				"August",
+				"September",
+				"October",
+				"January",
+				"February",
+				"March",
+				"April"],
+				datasets:[ {
+					label: "Sales Analytics", fill: !0, backgroundColor: "rgba(53, 205, 58, 0.2)", borderColor: "#35cd3a", borderCapStyle: "butt", borderDash: [], borderDashOffset: 0, pointBorderColor: "#35cd3a", pointBackgroundColor: "#35cd3a", pointBorderWidth: 1, pointHoverRadius: 5, pointHoverBackgroundColor: "#35cd3a", pointHoverBorderColor: "#35cd3a", pointHoverBorderWidth: 1, pointRadius: 1, pointHitRadius: 5, data: [20, 10, 18, 14, 32, 18, 15, 22, 8, 6, 17, 12, 17, 18, 14, 25, 18, 12, 19, 21, 16, 14, 24, 21, 13, 15, 27, 29, 21, 11, 14, 19, 21, 17]
+				}
+				]
+			},
+			options : {
+				maintainAspectRatio:!1, legend: {
+					display: !1
+				}
+				, animation: {
+					easing: "easeInOutBack"
+				}
+				, scales: {
+					yAxes:[ {
+						display:!1, ticks: {
+							fontColor: "rgba(0,0,0,0.5)", fontStyle: "bold", beginAtZero: !0, maxTicksLimit: 10, padding: 0
+						}
+						, gridLines: {
+							drawTicks: !1, display: !1
+						}
+					}
+					], xAxes:[ {
+						display:!1, gridLines: {
+							zeroLineColor: "transparent"
+						}
+						, ticks: {
+							padding: -20, fontColor: "rgba(255,255,255,0.2)", fontStyle: "bold"
+						}
+					}
+					]
+				}
+			}
+		});		
+	</script>
+{% endblock javascripts %}

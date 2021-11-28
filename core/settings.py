@@ -8,8 +8,9 @@ from decouple import config
 from unipath import Path
 import dj_database_url
 
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = Path(__file__).parent
+BASE_DIR = Path(__file__).resolve().parent.parent
 CORE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # SECURITY WARNING: keep the secret key used in production secret!
@@ -30,7 +31,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'app'  # Enable the inner app 
+    'app',  # Enable the inner app 
+    'django.contrib.humanize',
+    'qr_code',
 ]
 
 MIDDLEWARE = [
@@ -48,11 +51,12 @@ ROOT_URLCONF = 'core.urls'
 LOGIN_REDIRECT_URL = "home"   # Route defined in app/urls.py
 LOGOUT_REDIRECT_URL = "home"  # Route defined in app/urls.py
 TEMPLATE_DIR = os.path.join(CORE_DIR, "core/templates")  # ROOT dir for templates
+TEMPLATE_DIR_APP = "app/modules"  # ROOT dir for templates
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [TEMPLATE_DIR],
+        'DIRS': [TEMPLATE_DIR, TEMPLATE_DIR_APP],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -72,8 +76,11 @@ WSGI_APPLICATION = 'core.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME'  : 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME'  : 'warehouse',
+        'HOST'  : 'localhost',
+        'USER'  : 'root',
+        'PASSWORD'  : ''
     }
 }
 
@@ -117,9 +124,24 @@ USE_TZ = True
 STATIC_ROOT = os.path.join(CORE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 # Extra places for collectstatic to find static files.
 STATICFILES_DIRS = (
     os.path.join(CORE_DIR, 'core/static'),
 )
 #############################################################
 #############################################################
+
+#===================================
+# APPLICATION SETTING WAREHOUSE
+#===================================
+COGS_PRICE = 'AVERAGE' #OPTION LIFO, AVERAGE
+#LIFO MASIH MEMILIKI MASALAH YAITU JIKA JUMLAH BARANG YG DIJUAL TERAKHIR MELEBIHI PEMBELIAN TERAKHIR,
+#JADI QTY SUDAH MELEBIHI BARANG YG TERAKHIR DIBELI, TP HPP MASIH PAKAI HPP PEMBELIAN TERAKHIR
+#INI BISA DIATASI DENGAN MEMBAGI HPP BERURUTAN SESUAI DENGAN JUMLAH BARANG YG TERAKHIR, JIKA BARANG TERAKHIR HABIS,
+#MAKA HPP DIHITUNG DENGAN MENGECEK HPP BARANG SEBELUM TERAKHIR DAN SETEUS NYA
+#===================================
+# END APPLICATION SETTING WAREHOUSE
+#===================================

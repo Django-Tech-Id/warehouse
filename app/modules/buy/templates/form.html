@@ -1,0 +1,213 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} UI Forms {% endblock %} 
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+	<div class="content">
+		<div class="page-inner">
+			<div class="page-header">
+				<h4 class="page-title">Buy Form</h4>
+				<ul class="breadcrumbs">
+					<li class="nav-home">
+						<a href="#">
+							<i class="flaticon-home"></i>
+						</a>
+					</li>
+					<li class="separator">
+						<i class="flaticon-right-arrow"></i>
+					</li>
+					<li class="nav-item">
+						<a href="{% url 'dashboard-buy' %}">Buy</a>
+					</li>
+					<li class="separator">
+						<i class="flaticon-right-arrow"></i>
+					</li>
+					<li class="nav-item">
+						<a href="{% url 'dashboard-buy-create' %}">Buy Form</a>
+					</li>
+				</ul>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<div class="card">
+						<div class="card-header">
+							<div class="card-title">Buy Form</div>
+						</div>
+						<form id="buyForm" method="POST" action="" enctype="multipart/form-data">
+							<div class="card-body">
+								<div class="row">
+									{% csrf_token %}
+									<div class="col-md-2">
+										{{ form.date.label_tag}}
+										{{ form.date }}                                
+									</div>
+									<div class="col-md-2">
+										{{ form.supplier.label_tag }}                                
+										{{ form.supplier }}                                
+									</div>
+									<div class="col-md-2">
+										{{ form.warehousein.label_tag }}                                
+										{{ form.warehousein }}                                
+									</div>
+									<div class="col-md-2">
+										{{ form.code.label_tag }}                                
+										{{ form.code }}                                
+									</div>
+									<div class="col-md-4">
+										{{ form.description.label_tag }}                                
+										{{ form.description }}                                
+									</div>
+								</div>
+							</div>
+							<hr />
+							<div class="card-header" style="margin-top: -20px;">
+								<div class="card-head-row">
+									<div class="card-title">Transaction Detail</div>
+									<div class="card-tools">
+										<ul class="nav nav-pills nav-secondary nav-pills-no-bd nav-sm" id="pills-tab" role="tablist">
+											<li class="nav-item">
+												{% if status == 'edit' %}
+												<a href="#" type="button" onclick="clearForm()" class="nav-link active" aria-selected="false" data-toggle="modal" data-target="#detail">Add New Comment</a>
+												{% endif %}
+											</li>
+										</ul>
+									</div>
+								</div>
+							</div>		
+							<div class="card-body">
+								<table class="table table-bordered table-striped table-hover">
+									<thead>
+										<td class="col-sm-1">No.</td>
+										<td class="col-sm-4">Product</td>
+										<td class="col-sm-1">QTY</td>
+										<td class="col-sm-2">Price</td>
+										<td class="col-sm-2">Total</td>
+										<td class="col-sm-2">Action</td>
+									</thead>
+									<tbody>
+										{% for detail in details %}
+										<tr>
+                                            <td>{{ forloop.counter }}</td>
+											<td>{{ detail.product }}</td>
+											{% load humanize %}
+											<td>{{ detail.qty|floatformat:0|intcomma }}</td>
+											<td>{{ detail.price_rp }}</td>
+											<td>{{ detail.total_rp }}</td>
+											<td>
+                                                <div class="btn-group" role="group" aria-label="Action">
+													<a href="#" onclick="getData('{{ detail.id }}')" type="button" class="btn btn-warning" aria-selected="false" data-toggle="modal" data-target="#detail">Edit</a>
+                                                    <a href="#" onclick="hapusDetail('{{ detail.id }}')" type="submit" class="btn btn-danger">Delete</a>
+                                                </div>                                
+											</td>
+										</tr>
+										{% endfor %}
+									</tbody>
+								</table>
+							</div>
+							<div class="card-action">
+								<input type="submit" class="btn btn-success" value="Save"/>
+								<a href="{% url 'dashboard-buy' %}" class="btn btn-danger">Cancel</a>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+			<!-- The Modal -->
+			<div class="modal" id="detail">
+				<div class="modal-dialog">
+				<div class="modal-content">							
+					<!-- Modal Header -->
+					<div class="modal-header">
+						<h4 class="modal-title">Add New Detail</h4>
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+					</div>
+					<form id="detailForm" method="POST" action="{% url 'dashboard-detail-create' %}">
+					<!-- Modal body -->
+					<div class="modal-body">
+							{% csrf_token %}
+							{{ detailForm.transaction }}
+							{{ detailForm.product.label_tag }}
+							{{ detailForm.product }}
+							{{ detailForm.qty.label_tag }}
+							{{ detailForm.qty }}
+							{{ detailForm.price.label_tag }}
+							{{ detailForm.price }}                                
+					</div>
+					<!-- Modal footer -->
+					<div class="modal-footer">
+						<input type="submit" class="btn btn-success" value="Save"/>
+						<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+					</div>
+					</form>
+				</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+	<!-- Atlantis DEMO methods, don't include it in your project! -->
+	<script src="/static/assets/js/setting-demo2.js"></script>
+	<script>
+		//== Class Initialization
+		function hapusDetail(id){
+			swal({
+				title: 'Do you want to delete?',
+				text: "You won't be able to revert this!",
+				type: 'warning',
+				buttons:{
+					cancel: {
+						visible: true,
+						text : 'Cancel',
+						className: 'btn btn-success'
+					},        			
+					confirm: {
+						text : 'OK',
+						className : 'btn btn-danger'
+					}
+				}
+			}).then((willDelete) => {
+				if (willDelete) {
+					var url = "{% url 'dashboard-detail-delete' 'hapus-ini' %}";
+					var newurl = url.replace('hapus-ini',id);
+					window.location.href = newurl;
+				}
+			});
+		}
+	</script>
+	<script>
+		function clearForm(){
+			var action = "{% url 'dashboard-detail-create' %}";
+			$('#detailForm').attr('action',action);
+			$("select[name=product]").val('').change();
+			$("input[name=qty]").val('');
+			$("input[name=price]").val('');
+		}
+		function getData(id){
+			var action = "{% url 'dashboard-detail-edit' 'hapus-ini' %}";
+			action = action.replace('hapus-ini',id);
+			$('#detailForm').attr('action',action);
+			$.ajax({
+				type: "GET",
+				dataType: 'json',
+				url: action,
+				async: false,
+				contentType: "application/json; charset=utf-8",
+				success: function (result) {
+					data = JSON.parse(result.data)
+					$("select[name=product]").val(data[0].fields.product).change();
+					$("input[name=price]").val(data[0].fields.price);
+					$("input[name=qty]").val(data[0].fields.qty);
+				}
+			});
+		}
+	</script>
+{% endblock javascripts %}	

@@ -4,7 +4,7 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
 	<title>
-        Django Atlantis Lite - {% block title %}{% endblock %} | AppSeed
+        SIFoDa | Sisten Informasi Pergudangan | {% block title %}{% endblock %}
     </title>
 
 	<meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
@@ -43,7 +43,6 @@
         {% include 'includes/sidebar.html' %}
 
 		<div class="main-panel">
-			
 			{% block content %}{% endblock content %}
 
 			{% include 'includes/footer.html' %}
@@ -63,6 +62,40 @@
 
     <!-- Specific Page JS goes HERE  -->
     {% block javascripts %}{% endblock javascripts %}
+
+	<script>
+		function notif(type, title, message, icon, url, target){
+			var content = {};
+			content.message = message;
+			content.title = title;
+
+			content.url = url;
+			content.target = target;
+			content.icon = icon
+			$.notify(content,{
+				type: type, //bootstrap notif
+				placement: {
+					from: 'top', //top, bottom
+					align: 'right' //left, right, center
+				},
+				time: 1000,
+				delay: 500,
+			});
+		}
+	</script>
+	{% if messages %}
+	<ul class="messages">
+		{% for message in messages %}
+			<script>
+				notif('primary','Notification','{{ message }}','fa fa-bell','#','_parent')
+			</script>
+			<!-- <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>
+				{{ message }}
+			</li> -->
+		{% endfor %}
+	</ul>
+	{% endif %}
+	
 
 </body>
 </html>
