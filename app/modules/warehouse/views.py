@@ -6,8 +6,10 @@ from app.modules.warehouse.forms import WarehouseForm
 import uuid
 from django.contrib import messages
 from app.functions import to
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
+@login_required(login_url='/login/')
 def dashboardWarehouse(request):
     filters = {}
     for key, value in request.GET.items():
@@ -26,6 +28,7 @@ def dashboardWarehouse(request):
     request.session['menu'] = 'dashboard-warehouse'
     return render(request, 'warehouse/templates/index.html', context)
 
+@login_required(login_url='/login/')
 def dashboardWarehouseCreate(request):
     form = WarehouseForm()
     if request.method == 'POST':
@@ -41,6 +44,7 @@ def dashboardWarehouseCreate(request):
     request.session['menu'] = 'dashboard-warehouse'
     return render(request, 'warehouse/templates/form.html', context)
 
+@login_required(login_url='/login/')
 def dashboardWarehouseEdit(request, id):
     data = Warehouse.objects.get(id=id)
     form = WarehouseForm(instance=data)
@@ -57,6 +61,7 @@ def dashboardWarehouseEdit(request, id):
     request.session['menu'] = 'dashboard-warehouse'
     return render(request, 'warehouse/templates/form.html', context)
 
+@login_required(login_url='/login/')
 def dashboardWarehouseDelete(request, id):
     data = Warehouse.objects.get(id=id)
     data.delete()
@@ -64,6 +69,7 @@ def dashboardWarehouseDelete(request, id):
     request.session['menu'] = 'dashboard-warehouse'
     return redirect('dashboard-warehouse')
 
+@login_required(login_url='/login/')
 def dashboardWarehousePrint(request):
     filters = {}
     for key, value in request.GET.items():

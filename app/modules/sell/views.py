@@ -7,8 +7,10 @@ from app.modules.detail.forms import DetailForm
 from app.functions import to
 from django.db.models import F, Sum
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
+@login_required(login_url='/login/')
 def dashboardSell(request):
     filters = {}
     for key, value in request.GET.items():
@@ -71,6 +73,7 @@ def dashboardSell(request):
     request.session['menu'] = 'dashboard-sell'
     return render(request, 'sell/templates/index.html', context)
 
+@login_required(login_url='/login/')
 def dashboardSellCreate(request):
     form = SellForm()
     if request.method == 'POST':
@@ -87,6 +90,7 @@ def dashboardSellCreate(request):
     request.session['menu'] = 'dashboard-sell'
     return render(request, 'sell/templates/form.html', context)
 
+@login_required(login_url='/login/')
 def dashboardSellEdit(request, id):
     data = Transaction.objects.get(id=id)
     details = data.details.all()
@@ -105,6 +109,7 @@ def dashboardSellEdit(request, id):
     request.session['menu'] = 'dashboard-sell'
     return render(request, 'sell/templates/form.html', context)
 
+@login_required(login_url='/login/')
 def dashboardSellInvoice(request, id):
     data = Transaction.objects.get(id=id)
     details = data.details.all()
@@ -121,6 +126,7 @@ def dashboardSellInvoice(request, id):
     }
     return to.pdf(request,'sell/templates/invoice.html',context)
 
+@login_required(login_url='/login/')
 def dashboardSellPrint(request):
     customer = ''
     warehousein = ''
@@ -188,6 +194,7 @@ def dashboardSellPrint(request):
     }    
     return to.pdf(request,'sell/templates/print.html',context)
 
+@login_required(login_url='/login/')
 def dashboardSellDelete(request, id):
     data = Transaction.objects.get(id=id)
     data.delete()

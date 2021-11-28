@@ -6,8 +6,10 @@ from app.modules.category.forms import CategoryForm
 import uuid
 from django.contrib import messages
 from app.functions import to
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
+@login_required(login_url='/login/')
 def dashboardCategory(request):
     filters = {}
     for key, value in request.GET.items():
@@ -26,6 +28,7 @@ def dashboardCategory(request):
     request.session['menu'] = 'dashboard-category'
     return render(request, 'category/templates/index.html', context)
 
+@login_required(login_url='/login/')
 def dashboardCategoryCreate(request):
     form = CategoryForm()
     if request.method == 'POST':
@@ -41,6 +44,7 @@ def dashboardCategoryCreate(request):
     request.session['menu'] = 'dashboard-category'
     return render(request, 'category/templates/form.html', context)
 
+@login_required(login_url='/login/')
 def dashboardCategoryEdit(request, id):
     data = Category.objects.get(id=id)
     form = CategoryForm(instance=data)
@@ -57,6 +61,7 @@ def dashboardCategoryEdit(request, id):
     request.session['menu'] = 'dashboard-category'
     return render(request, 'category/templates/form.html', context)
 
+@login_required(login_url='/login/')
 def dashboardCategoryDelete(request, id):
     data = Category.objects.get(id=id)
     data.delete()
@@ -64,6 +69,7 @@ def dashboardCategoryDelete(request, id):
     request.session['menu'] = 'dashboard-category'
     return redirect('dashboard-category')
 
+@login_required(login_url='/login/')
 def dashboardCategoryPrint(request):
     filters = {}
     for key, value in request.GET.items():

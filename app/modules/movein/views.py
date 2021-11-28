@@ -11,8 +11,10 @@ from django.core import serializers
 from django.http import JsonResponse
 from decimal import Decimal
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
+@login_required(login_url='/login/')
 def dashboardMovein(request):
     filters = {}
     for key, value in request.GET.items():
@@ -82,6 +84,7 @@ def dashboardMovein(request):
     request.session['menu'] = 'dashboard-movein'
     return render(request, 'movein/templates/index.html', context)
 
+@login_required(login_url='/login/')
 def dashboardMoveinEdit(request, id):
     data = Transaction.objects.get(id=id)
     details = data.details.all()
@@ -100,6 +103,7 @@ def dashboardMoveinEdit(request, id):
     request.session['menu'] = 'dashboard-movein'
     return render(request, 'movein/templates/form.html', context)
 
+@login_required(login_url='/login/')
 def dashboardMoveinInvoice(request, id):
     data = Transaction.objects.get(id=id)
     details = data.details.all()
@@ -116,6 +120,7 @@ def dashboardMoveinInvoice(request, id):
     }
     return to.pdf(request,'movein/templates/invoice.html',context)
 
+@login_required(login_url='/login/')
 def dashboardMoveinPrint(request):
     warehousein = ''
     warehouseout = ''

@@ -5,8 +5,10 @@ from app.models import Company
 from app.modules.company.forms import CompanyForm
 import uuid
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
+@login_required(login_url='/login/')
 def dashboardCompanyCreate(request):
     company = Company.objects.all()
     if company.exists():
@@ -25,6 +27,7 @@ def dashboardCompanyCreate(request):
     request.session['menu'] = 'dashboard-company'
     return render(request, 'company/templates/form.html', context)
 
+@login_required(login_url='/login/')
 def dashboardCompanyEdit(request, id):
     data = Company.objects.get(id=id)
     form = CompanyForm(instance=data)

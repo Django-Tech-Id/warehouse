@@ -8,8 +8,10 @@ from app.modules.detail.forms import DetailForm
 from app.functions import to
 from django.db.models import F, Sum
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
+@login_required(login_url='/login/')
 def dashboardMoveout(request):
     filters = {}
     for key, value in request.GET.items():
@@ -72,6 +74,7 @@ def dashboardMoveout(request):
     request.session['menu'] = 'dashboard-moveout'
     return render(request, 'moveout/templates/index.html', context)
 
+@login_required(login_url='/login/')
 def dashboardMoveoutCreate(request):
     form = MoveoutForm()
     if request.method == 'POST':
@@ -101,6 +104,7 @@ def dashboardMoveoutCreate(request):
     request.session['menu'] = 'dashboard-moveout'
     return render(request, 'moveout/templates/form.html', context)
 
+@login_required(login_url='/login/')
 def dashboardMoveoutEdit(request, id):
     data = Transaction.objects.get(id=id)
     details = data.details.all()
@@ -119,6 +123,7 @@ def dashboardMoveoutEdit(request, id):
     request.session['menu'] = 'dashboard-moveout'
     return render(request, 'moveout/templates/form.html', context)
 
+@login_required(login_url='/login/')
 def dashboardMoveoutInvoice(request, id):
     data = Transaction.objects.get(id=id)
     details = data.details.all()
@@ -135,6 +140,7 @@ def dashboardMoveoutInvoice(request, id):
     }
     return to.pdf(request,'moveout/templates/invoice.html',context)
 
+@login_required(login_url='/login/')
 def dashboardMoveoutPrint(request):
     warehousein = ''
     warehouseout = ''
@@ -202,6 +208,7 @@ def dashboardMoveoutPrint(request):
     }
     return to.pdf(request,'moveout/templates/print.html',context)
 
+@login_required(login_url='/login/')
 def dashboardMoveoutDelete(request, id):
     data = Transaction.objects.get(id=id)
     data.delete()

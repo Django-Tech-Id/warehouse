@@ -8,8 +8,10 @@ from app.functions import to, validate
 from django.db.models import F, Sum
 from django.db.models import OuterRef, Subquery, Q
 from django.conf import settings
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
+@login_required(login_url='/login/')
 def dashboardInventory(request):
     filters = {}
     for key, value in request.GET.items():
@@ -163,6 +165,7 @@ def dashboardInventory(request):
     request.session['menu'] = 'dashboard-inventory'
     return render(request, 'inventory/templates/index.html', context)
 
+@login_required(login_url='/login/')
 def dashboardInventoryPrint(request):
     category = ''
     supplier = ''

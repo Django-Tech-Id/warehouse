@@ -7,8 +7,10 @@ from app.modules.detail.forms import DetailForm
 from app.functions import to
 from django.db.models import F, Sum
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
+@login_required(login_url='/login/')
 def dashboardBuy(request):
     filters = {}
     for key, value in request.GET.items():
@@ -72,6 +74,7 @@ def dashboardBuy(request):
     request.session['menu'] = 'dashboard-buy'
     return render(request, 'buy/templates/index.html', context)
 
+@login_required(login_url='/login/')
 def dashboardBuyCreate(request):
     form = BuyForm()
     if request.method == 'POST':
@@ -88,6 +91,7 @@ def dashboardBuyCreate(request):
     request.session['menu'] = 'dashboard-buy'
     return render(request, 'buy/templates/form.html', context)
 
+@login_required(login_url='/login/')
 def dashboardBuyEdit(request, id):
     data = Transaction.objects.get(id=id)
     details = data.details.all()
@@ -106,6 +110,7 @@ def dashboardBuyEdit(request, id):
     request.session['menu'] = 'dashboard-buy'
     return render(request, 'buy/templates/form.html', context)
 
+@login_required(login_url='/login/')
 def dashboardBuyInvoice(request, id):
     data = Transaction.objects.get(id=id)
     details = data.details.all()
@@ -122,6 +127,7 @@ def dashboardBuyInvoice(request, id):
     }
     return to.pdf(request,'buy/templates/invoice.html',context)
 
+@login_required(login_url='/login/')
 def dashboardBuyPrint(request):
     supplier = ''
     warehousein = ''
@@ -189,6 +195,7 @@ def dashboardBuyPrint(request):
     }
     return to.pdf(request,'buy/templates/print.html',context)
 
+@login_required(login_url='/login/')
 def dashboardBuyDelete(request, id):
     data = Transaction.objects.get(id=id)
     data.delete()

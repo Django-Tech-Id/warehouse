@@ -11,12 +11,14 @@ from django.db.models import F, Sum
 from django.db.models import OuterRef, Subquery, Q
 from django.contrib import messages
 from decimal import Decimal
+from django.contrib.auth.decorators import login_required
 
 MINUS_TRANS = ['Sell','Move Out']
 COGS_TRANS = ['Sell', 'Move Out']
 MOVEOUT_TRANS = 'Move Out'
 
 # Create your views here.
+@login_required(login_url='/login/')
 def dashboardDetailCreate(request):
     if request.method == 'POST':
         print(request.POST)
@@ -67,6 +69,7 @@ def dashboardDetailCreate(request):
     messages.error(request, 'Data has been created')
     return redirect(request.META.get('HTTP_REFERER'))
 
+@login_required(login_url='/login/')
 def dashboardDetailEdit(request, id):
     data = Detail.objects.get(id=id)
     data_qty = data.qty
@@ -113,6 +116,7 @@ def dashboardDetailEdit(request, id):
         messages.error(request, 'Data has been updated')
         return redirect(request.META.get('HTTP_REFERER'))
 
+@login_required(login_url='/login/')
 def dashboardDetailVerify(request, id):
     data = Detail.objects.get(id=id)
     if request.is_ajax and request.method == 'GET':
@@ -126,6 +130,7 @@ def dashboardDetailVerify(request, id):
         data.save()
     return redirect(request.META.get('HTTP_REFERER'))
 
+@login_required(login_url='/login/')
 def dashboardDetailDelete(request, id):
     data = Detail.objects.get(id=id)
     if data.transaction.kind == MOVEOUT_TRANS:

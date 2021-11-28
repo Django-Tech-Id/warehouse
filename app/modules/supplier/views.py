@@ -6,8 +6,10 @@ from app.modules.supplier.forms import SupplierForm
 import uuid
 from django.contrib import messages
 from app.functions import to
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
+@login_required(login_url='/login/')
 def dashboardSupplier(request):
     filters = {}
     for key, value in request.GET.items():
@@ -26,6 +28,7 @@ def dashboardSupplier(request):
     request.session['menu'] = 'dashboard-supplier'
     return render(request, 'supplier/templates/index.html', context)
 
+@login_required(login_url='/login/')
 def dashboardSupplierCreate(request):
     form = SupplierForm()
     if request.method == 'POST':
@@ -41,6 +44,7 @@ def dashboardSupplierCreate(request):
     request.session['menu'] = 'dashboard-supplier'
     return render(request, 'supplier/templates/form.html', context)
 
+@login_required(login_url='/login/')
 def dashboardSupplierEdit(request, id):
     data = Supplier.objects.get(id=id)
     form = SupplierForm(instance=data)
@@ -57,6 +61,7 @@ def dashboardSupplierEdit(request, id):
     request.session['menu'] = 'dashboard-supplier'
     return render(request, 'supplier/templates/form.html', context)
 
+@login_required(login_url='/login/')
 def dashboardSupplierDelete(request, id):
     data = Supplier.objects.get(id=id)
     data.delete()
@@ -64,6 +69,7 @@ def dashboardSupplierDelete(request, id):
     request.session['menu'] = 'dashboard-supplier'
     return redirect('dashboard-supplier')
 
+@login_required(login_url='/login/')
 def dashboardSupplierPrint(request):
     filters = {}
     for key, value in request.GET.items():

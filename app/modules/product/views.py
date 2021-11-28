@@ -8,8 +8,10 @@ from django.contrib import messages
 from app.functions import to, validate
 from django.db.models import F, Sum
 from django.db.models import OuterRef, Subquery, Q
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
+@login_required(login_url='/login/')
 def dashboardProduct(request):
     filters = {}
     for key, value in request.GET.items():
@@ -130,6 +132,7 @@ def dashboardProduct(request):
     request.session['menu'] = 'dashboard-product'
     return render(request, 'product/templates/index.html', context)
 
+@login_required(login_url='/login/')
 def dashboardProductCreate(request):
     form = ProductForm()
     if request.method == 'POST':
@@ -145,6 +148,7 @@ def dashboardProductCreate(request):
     request.session['menu'] = 'dashboard-product'
     return render(request, 'product/templates/form.html', context)
 
+@login_required(login_url='/login/')
 def dashboardProductEdit(request, id):
     data = Product.objects.get(id=id)
     form = ProductForm(instance=data)
@@ -161,6 +165,7 @@ def dashboardProductEdit(request, id):
     request.session['menu'] = 'dashboard-product'
     return render(request, 'product/templates/form.html', context)
 
+@login_required(login_url='/login/')
 def dashboardProductDelete(request, id):
     data = Product.objects.get(id=id)
     data.delete()
@@ -168,6 +173,7 @@ def dashboardProductDelete(request, id):
     request.session['menu'] = 'dashboard-product'
     return redirect('dashboard-product')
 
+@login_required(login_url='/login/')
 def dashboardProductPrint(request):
     category = ''
     supplier = ''

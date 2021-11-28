@@ -8,8 +8,10 @@ import uuid
 from django.contrib import messages
 from django.db.models import OuterRef, Subquery, Q
 from app.functions import to
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
+@login_required(login_url='/login/')
 def dashboardCustomer(request):
     filters = {}
     for key, value in request.GET.items():
@@ -28,6 +30,7 @@ def dashboardCustomer(request):
     request.session['menu'] = 'dashboard-customer'
     return render(request, 'customer/templates/index.html', context)
 
+@login_required(login_url='/login/')
 def dashboardCustomerCreate(request):
     form = CustomerForm()
     if request.method == 'POST':
@@ -43,6 +46,7 @@ def dashboardCustomerCreate(request):
     request.session['menu'] = 'dashboard-customer'
     return render(request, 'customer/templates/form.html', context)
 
+@login_required(login_url='/login/')
 def dashboardCustomerEdit(request, id):
     data = Customer.objects.get(id=id)
     form = CustomerForm(instance=data)
@@ -59,6 +63,7 @@ def dashboardCustomerEdit(request, id):
     request.session['menu'] = 'dashboard-customer'
     return render(request, 'customer/templates/form.html', context)
 
+@login_required(login_url='/login/')
 def dashboardCustomerDelete(request, id):
     data = Customer.objects.get(id=id)
     data.delete()
@@ -66,6 +71,7 @@ def dashboardCustomerDelete(request, id):
     request.session['menu'] = 'dashboard-customer'
     return redirect('dashboard-customer')
 
+@login_required(login_url='/login/')
 def dashboardCustomerPrint(request):
     filters = {}
     for key, value in request.GET.items():

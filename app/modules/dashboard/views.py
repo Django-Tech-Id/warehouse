@@ -10,8 +10,10 @@ from django.contrib.auth.models import User
 from django.db.models import F, Sum
 from django.db.models import OuterRef, Subquery, Q
 import calendar
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
+@login_required(login_url='/login/')
 def dashboard(request):
     start = date(date.today().year, 1, 1)
     end = date(date.today().year, 12, 31)
