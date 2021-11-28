@@ -130,8 +130,8 @@ Warehouse is an application for warehouse management. It's writtern on Python 3 
 
 ```bash
 $ # Get the code
-$ git clone https://github.com/app-generator/django-dashboard-atlantis.git
-$ cd django-dashboard-atlantis
+$ git clone https://github.com/Django-Tech-Id/warehouse.git
+$ cd warehouse
 $
 $ # Virtualenv modules installation (Unix based systems)
 $ virtualenv env
