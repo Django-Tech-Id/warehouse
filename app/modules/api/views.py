@@ -253,25 +253,41 @@ def apiTransactionMoveinHistory(request,id):
         }
         return JsonResponse(response, status=400)
     else:
-        transaction = Transaction.objects.get(id=id)
-        statuses = transaction.statuses.all().order_by('-created_at')
-        items = []
-        for status in statuses:
-            item = {
-                'date': status.created_at,
-                'status': status.status,
-                'warehouse': status.warehouse.name,
-                'description': status.description
+        if (not validate.uuid(id)):
+            response = {
+                'code': 400,
+                'status': False,
+                'message': 'UUID is not valid',
             }
-            items.append(item)
+            return JsonResponse(response, status=400)
+        else:
+            if not Transaction.objects.filter(id=id).exists():
+                response = {
+                    'code': 404,
+                    'status': False,
+                    'message': 'Transaction is not found',
+                }
+                return JsonResponse(response, status=404)
+            else:
+                transaction = Transaction.objects.get(id=id)
+                statuses = transaction.statuses.all().order_by('-created_at')
+                items = []
+                for status in statuses:
+                    item = {
+                        'date': status.created_at,
+                        'status': status.status,
+                        'warehouse': status.warehouse.name,
+                        'description': status.description
+                    }
+                    items.append(item)
 
-        response = {
-            'code': 200,
-            'status': True,
-            'message': 'List of statuses',
-            'data': items
-        }
-        return JsonResponse(response, status=200)
+                response = {
+                    'code': 200,
+                    'status': True,
+                    'message': 'List of statuses',
+                    'data': items
+                }
+                return JsonResponse(response, status=200)
 
 def apiWarehouse(request):
     if request.method == 'POST':
